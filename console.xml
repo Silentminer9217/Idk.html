@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<console>
+    <metadata>
+        <title>Admin Console</title>
+        <version>1.0</version>
+        <status>OPERATIONAL</status>
+    </metadata>
+    <interface>
+        <header>Administrative Console</header>
+        <description>System administration and user management interface</description>
+        <password>silent blox</password>
+        <maxAttempts>3</maxAttempts>
+    </interface>
+    <commands>
+        <command>
+            <name>Kick User</name>
+            <action>kick</action>
+            <description>Remove user from session</description>
+            <color>#d97706,#fbbf24</color>
+        </command>
+        <command>
+            <name>Ban User</name>
+            <action>ban</action>
+            <description>Permanently ban user from system</description>
+            <color>#b91c1c,#f87171</color>
+        </command>
+        <command>
+            <name>Close User's Tab</name>
+            <action>close</action>
+            <description>Force close user browser tab</description>
+            <color>#4b5563,#9ca3af</color>
+        </command>
+    </commands>
+    <system>
+        <systemStatus>OPERATIONAL</systemStatus>
+        <connection>SECURE</connection>
+        <database>CONNECTED</database>
+        <activeUsers>127</activeUsers>
+        <serverLoad>45%</serverLoad>
+        <memoryUsage>62%</memoryUsage>
+    </system>
+</console>
