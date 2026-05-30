@@ -39,6 +39,135 @@ body, html {
     color: #00ff88; padding: 20px; box-sizing: border-box; overflow-y: auto;
     white-space: pre-wrap; font-family: monospace; font-size: 14px;
 }
+
+/* Admin Console Inline Styles */
+#admin-console {
+    display: none; width: 100%; height: 100%; background: #0f172a;
+    flex-direction: column; justify-content: center; align-items: center;
+}
+
+.admin-container {
+    background: rgba(30, 41, 59, 0.7);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    width: 400px;
+    text-align: center;
+    color: #e2e8f0;
+}
+
+.admin-header {
+    color: #00d2ff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px #00d2ff;
+    font-size: 24px;
+}
+
+.admin-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid #22c55e;
+    color: #e2e8f0;
+    padding: 12px;
+    width: 80%;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.admin-input:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.admin-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-kick {
+    background: linear-gradient(135deg, #d97706, #fbbf24);
+    color: white;
+}
+
+.btn-ban {
+    background: linear-gradient(135deg, #b91c1c, #f87171);
+    color: white;
+}
+
+.btn-close {
+    background: linear-gradient(135deg, #4b5563, #9ca3af);
+    color: white;
+}
+
+.admin-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00d2ff;
+}
+
+#result-message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #22c55e;
+    min-height: 24px;
+}
+
+/* Password Screen */
+#password-screen {
+    display: none;
+}
+
+.password-container {
+    background: rgba(30, 41, 59, 0.7);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    width: 350px;
+    text-align: center;
+    color: #e2e8f0;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#password-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid #00d2ff;
+    color: #e2e8f0;
+    padding: 12px;
+    width: 80%;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#password-input:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+#password-error {
+    color: #f87171;
+    font-size: 14px;
+    margin-top: 15px;
+}
 </style>
 </head>
 <body>
@@ -51,12 +180,37 @@ body, html {
     <button class="btn" onclick="openAdminConsole()">OPEN ADMINISTRATIVE CONSOLE</button>
 </div>
 
-<!-- Replaced iframe with a preformatted text box for the XML file -->
+<!-- Data Console Output -->
 <div id="console-output"></div>
 
+<!-- Password Screen (Inline) -->
+<div id="password-screen" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #0f172a;">
+    <div class="password-container">
+        <h3 style="color: #00d2ff; margin-top: 0;">Verify Your Access</h3>
+        <input type="password" id="password-input" placeholder="Enter Password">
+        <button class="btn" onclick="checkPassword()">Submit</button>
+        <p id="password-error"></p>
+    </div>
+</div>
+
+<!-- Admin Console (Inline) -->
+<div id="admin-console" style="width: 100%; height: 100%; background: #0f172a;">
+    <div class="admin-container">
+        <h2 class="admin-header">Administrative Console</h2>
+        <input type="text" id="target-user" class="admin-input" placeholder="Enter Target Username">
+        <div class="controls">
+            <button class="admin-btn btn-kick" onclick="executeCommand('Kick')">Kick User</button>
+            <button class="admin-btn btn-ban" onclick="executeCommand('Ban')">Ban User</button>
+            <button class="admin-btn btn-close" onclick="executeCommand('Close Tab')">Close User's Tab</button>
+        </div>
+        <p id="result-message"></p>
+    </div>
+</div>
+
 <script>
+let attempts = 0;
+const MAX_ATTEMPTS = 3;
 const FILE_URL = '';
-const ADMIN_CONSOLE_URL = 'https://cdn.jsdelivr.net/gh/Silentminer9217/Idk.html@main/consoleadmin.html';
 
 async function loadConsoleFile() {
     const status = document.getElementById('status');
@@ -66,7 +220,6 @@ async function loadConsoleFile() {
     mainBtn.style.display = 'none';
     status.innerText = "CONNECTING TO SERVER DATA CONSOLE...";
     
-    // Show "Force Load" button after 5 seconds
     setTimeout(() => {
         slowBtn.style.display = 'block';
     }, 5000);
@@ -77,26 +230,52 @@ async function loadConsoleFile() {
         displayData(data);
     } catch (error) {
         status.innerText = "COULD NOT CONNECT. LAUNCHING BACKUP SERVER... CONSOLE OPERATIONAL...";
-        // Fallback: If local file fails, display the error in the console box
         displayData("Error: Could not read local file. \nDetails: " + error.message);
     }
 }
 
 function displayData(fileText) {
-    // Hide the launcher UI and show the data console box
     document.getElementById('launcher-ui').style.display = 'none';
     const consoleBox = document.getElementById('console-output');
     consoleBox.style.display = 'block';
-    
-    // Display the XML file contents securely as plain text
     consoleBox.innerText = fileText;
 }
 
 function openAdminConsole() {
-    const win = window.open(ADMIN_CONSOLE_URL, "_blank");
-    if (!win) {
-        alert("Pop-ups blocked! Please allow pop-ups and try again.");
+    document.getElementById('launcher-ui').style.display = 'none';
+    document.getElementById('password-screen').style.display = 'flex';
+}
+
+function checkPassword() {
+    const password = document.getElementById('password-input').value;
+    const errorText = document.getElementById('password-error');
+    
+    if (password === 'silent blox') {
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('admin-console').style.display = 'flex';
+    } else {
+        attempts++;
+        if (attempts >= MAX_ATTEMPTS) {
+            alert("Maximum attempts reached. Closing tab.");
+            window.close();
+        } else {
+            errorText.textContent = `Access Denied. ${MAX_ATTEMPTS - attempts} attempts left.`;
+        }
     }
+}
+
+function executeCommand(commandName) {
+    const user = document.getElementById('target-user').value;
+    const resultBox = document.getElementById('result-message');
+    
+    if (!user) {
+        resultBox.style.color = '#f87171';
+        resultBox.textContent = "Error: Please enter a username.";
+        return;
+    }
+    
+    resultBox.style.color = '#22c55e';
+    resultBox.textContent = `Successfully executed command: ${commandName} (${user})`;
 }
 </script>
 
