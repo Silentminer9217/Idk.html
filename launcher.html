@@ -4,280 +4,60 @@
 <meta charset="UTF-8">
 <title>ADMINISTRATION CONSOLE</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body, html {
-    width: 100%;
-    height: 100%;
-    background: #000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #e2e8f0;
+    margin: 0; padding: 0; overflow: hidden; height: 100%;
+    background: #000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 #launcher-ui {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     background: radial-gradient(circle, #001f3f 0%, #000000 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    z-index: 10;
 }
-
+/* Loading Animation: Blue and Green Spinning Circles */
 .loader {
-    width: 100px;
-    height: 100px;
-    border: 10px solid #00ff88;
-    border-top: 10px solid #0077ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    width: 100px; height: 100px; border: 10px solid #00ff88;
+    border-top: 10px solid #0077ff; border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 20px;
 }
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
 .status-text {
-    color: #00ff88;
-    font-size: 20px;
-    text-shadow: 0 0 10px #00ff88;
+    color: #00ff88; font-size: 20px; text-shadow: 0 0 10px #00ff88;
+    margin-bottom: 20px;
 }
-
 .btn {
-    padding: 15px 30px;
-    background: transparent;
-    color: #fff;
-    border: 2px solid #0077ff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
+    padding: 15px 30px; background: transparent; color: #fff;
+    border: 2px solid #0077ff; border-radius: 5px; cursor: pointer;
+    font-size: 16px; transition: 0.3s; margin: 10px;
 }
-
-.btn:hover {
-    background: #0077ff;
-    box-shadow: 0 0 20px #0077ff;
-}
-
-.slow-btn {
-    color: #ffcc00;
-    border-color: #ffcc00;
-    display: none;
-}
-
+.btn:hover { background: #0077ff; box-shadow: 0 0 20px #0077ff; }
+.slow-btn { color: #ffcc00; border-color: #ffcc00; display: none; }
 #console-output {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    color: #00ff88;
-    padding: 20px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    font-family: monospace;
-    font-size: 14px;
-    z-index: 20;
-    display: none;
-}
-
-#password-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-}
-
-.password-container {
-    background: rgba(30, 41, 59, 0.7);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    width: 350px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.password-container h3 {
-    color: #00d2ff;
-    margin: 0;
-    font-size: 18px;
-}
-
-#password-input {
-    background: rgba(15, 23, 42, 0.6);
-    border: 2px solid #00d2ff;
-    color: #e2e8f0;
-    padding: 12px;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 16px;
-}
-
-#password-input:focus {
-    outline: none;
-    border-color: #22c55e;
-}
-
-#password-error {
-    color: #f87171;
-    font-size: 14px;
-    min-height: 20px;
-    margin: 0;
-}
-
-#admin-console {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-}
-
-.admin-container {
-    background: rgba(30, 41, 59, 0.7);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    width: 400px;
-    text-align: center;
-}
-
-.admin-header {
-    color: #00d2ff;
-    margin: 0 0 30px 0;
-    text-shadow: 0 0 10px #00d2ff;
-    font-size: 24px;
-}
-
-.admin-input {
-    background: rgba(15, 23, 42, 0.6);
-    border: 2px solid #22c55e;
-    color: #e2e8f0;
-    padding: 12px;
-    width: 100%;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.admin-input:focus {
-    outline: none;
-    border-color: #22c55e;
-}
-
-.controls {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.admin-btn {
-    padding: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    color: white;
-}
-
-.btn-kick {
-    background: linear-gradient(135deg, #d97706, #fbbf24);
-}
-
-.btn-ban {
-    background: linear-gradient(135deg, #b91c1c, #f87171);
-}
-
-.btn-close {
-    background: linear-gradient(135deg, #4b5563, #9ca3af);
-}
-
-.admin-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #00d2ff;
-}
-
-#result-message {
-    color: #22c55e;
-    font-weight: bold;
-    min-height: 24px;
-    margin: 0;
+    display: none; width: 100%; height: 100%; background: #000;
+    color: #00ff88; padding: 20px; box-sizing: border-box; overflow-y: auto;
+    white-space: pre-wrap; font-family: monospace; font-size: 14px;
 }
 </style>
 </head>
 <body>
 
 <div id="launcher-ui">
-    <div class="loader"></div>
+    <div class="loader" id="loader-circle"></div>
     <div class="status-text" id="status">INITIALIZING CONSOLE PLEASE WAIT...</div>
     <button class="btn" id="main-btn" onclick="loadConsoleFile()">OPEN ADMINISTRATIVE SERVER & DATA CONSOLE</button>
     <button class="btn slow-btn" id="slow-btn" onclick="loadConsoleFile()">TAKING TOO LONG? FORCE LOAD</button>
-    <button class="btn" onclick="openAdminConsole()">OPEN ADMINISTRATIVE CONSOLE</button>
+    <button class="btn" onclick="openUndetectable()">OPEN ADMINISTRATIVE CONSOLE</button>
 </div>
 
+<!-- Replaced iframe with a preformatted text box for the XML file -->
 <div id="console-output"></div>
 
-<div id="password-screen">
-    <div class="password-container">
-        <h3>Verify Your Access</h3>
-        <input type="password" id="password-input" placeholder="Enter Password">
-        <button class="btn" onclick="checkPassword()" style="margin: 0;">Submit</button>
-        <p id="password-error"></p>
-    </div>
-</div>
-
-<div id="admin-console">
-    <div class="admin-container">
-        <h2 class="admin-header">Administrative Console</h2>
-        <input type="text" id="target-user" class="admin-input" placeholder="Enter Target Username">
-        <div class="controls">
-            <button class="admin-btn btn-kick" onclick="executeCommand('Kick')">Kick User</button>
-            <button class="admin-btn btn-ban" onclick="executeCommand('Ban')">Ban User</button>
-            <button class="admin-btn btn-close" onclick="executeCommand('Close Tab')">Close User's Tab</button>
-        </div>
-        <p id="result-message"></p>
-    </div>
-</div>
-
 <script>
-let attempts = 0;
-const MAX_ATTEMPTS = 3;
-const CONSOLE_XML_URL = 'https://cdn.jsdelivr.net/gh/Silentminer9217/Idk.html@main/console.xml';
+const FILE_URL = '';
 
-function loadConsoleFile() {
+async function loadConsoleFile() {
     const status = document.getElementById('status');
     const mainBtn = document.getElementById('main-btn');
     const slowBtn = document.getElementById('slow-btn');
@@ -285,62 +65,35 @@ function loadConsoleFile() {
     mainBtn.style.display = 'none';
     status.innerText = "CONNECTING TO SERVER DATA CONSOLE...";
     
+    // Show "Force Load" button after 5 seconds
     setTimeout(() => {
         slowBtn.style.display = 'block';
     }, 5000);
 
-    fetch(CONSOLE_XML_URL)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('launcher-ui').style.display = 'none';
-            const consoleOutput = document.getElementById('console-output');
-            consoleOutput.style.display = 'block';
-            consoleOutput.innerText = "XML CONSOLE DATA:\n\n" + data;
-        })
-        .catch(error => {
-            status.innerText = "LAUNCHING BACKUP SERVER... CONSOLE OPERATIONAL...";
-            document.getElementById('launcher-ui').style.display = 'none';
-            const consoleOutput = document.getElementById('console-output');
-            consoleOutput.style.display = 'block';
-            consoleOutput.innerText = "Error loading XML: " + error.message;
-        });
+    try {
+        const response = await fetch(FILE_URL);
+        const data = await response.text();
+        displayData(data);
+    } catch (error) {
+        status.innerText = "COULD NOT CONNECT. LAUNCHING BACKUP SERVER... CONSOLE OPERATIONAL...";
+        // Fallback: If local file fails, display the error in the console box
+        displayData("Error: Could not read local file. \nDetails: " + error.message);
+    }
 }
 
-function openAdminConsole() {
+function displayData(fileText) {
+    // Hide the launcher UI and show the data console box
     document.getElementById('launcher-ui').style.display = 'none';
-    document.getElementById('password-screen').style.display = 'flex';
+    const consoleBox = document.getElementById('console-output');
+    consoleBox.style.display = 'block';
+    
+    // Display the XML file contents securely as plain text
+    consoleBox.innerText = fileText;
 }
 
-function checkPassword() {
-    const password = document.getElementById('password-input').value;
-    const errorText = document.getElementById('password-error');
-    
-    if (password === 'silent blox') {
-        document.getElementById('password-screen').style.display = 'none';
-        document.getElementById('admin-console').style.display = 'flex';
-    } else {
-        attempts++;
-        if (attempts >= MAX_ATTEMPTS) {
-            alert("Maximum attempts reached. Closing tab.");
-            window.close();
-        } else {
-            errorText.textContent = `Access Denied. ${MAX_ATTEMPTS - attempts} attempts left.`;
-        }
-    }
-}
-
-function executeCommand(commandName) {
-    const user = document.getElementById('target-user').value;
-    const resultBox = document.getElementById('result-message');
-    
-    if (!user) {
-        resultBox.style.color = '#f87171';
-        resultBox.textContent = "Error: Please enter a username.";
-        return;
-    }
-    
-    resultBox.style.color = '#22c55e';
-    resultBox.textContent = `Successfully executed command: ${commandName} (${user})`;
+function openUndetectable() {
+    const adminConsoleURL = 'https://cdn.jsdelivr.net/gh/Silentminer9217/Idk.html@main/consoleadmin.html';
+    window.open(adminConsoleURL, "_blank");
 }
 </script>
 
