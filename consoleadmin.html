@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Console</title>
+<style>
+:root {
+    --bg-dark: #0f172a;
+    --blue: #00d2ff;
+    --green: #22c55e;
+    --text-light: #e2e8f0;
+    --glass: rgba(30, 41, 59, 0.7);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Loading Screen */
+#loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.spinner {
+    width: 80px;
+    height: 80px;
+    border: 8px solid rgba(255, 255, 255, 0.1);
+    border-top: 8px solid var(--blue);
+    border-right: 8px solid var(--green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+button {
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--blue);
+}
+
+/* Common Screen Styles */
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background: var(--glass);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    width: 350px;
+    text-align: center;
+}
+
+/* Password Screen */
+input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid var(--blue);
+    color: var(--text-light);
+    padding: 12px;
+    width: 80%;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--green);
+}
+
+/* Admin Console */
+.admin-header {
+    color: var(--blue);
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px var(--blue);
+    font-size: 24px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.controls button {
+    width: 100%;
+}
+
+.btn-ban {
+    background: linear-gradient(135deg, #b91c1c, #f87171);
+}
+
+.btn-kick {
+    background: linear-gradient(135deg, #d97706, #fbbf24);
+}
+
+.btn-close {
+    background: linear-gradient(135deg, #4b5563, #9ca3af);
+}
+
+#result-message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: var(--green);
+    min-height: 24px;
+}
+</style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <button onclick="goToPassword()">Launch Administrative Console</button>
+    </div>
+
+    <!-- Password Screen -->
+    <div id="password-screen" class="screen">
+        <h3>Verify Your Access</h3>
+        <input type="password" id="password-input" placeholder="Enter Password">
+        <button onclick="checkPassword()">Submit</button>
+        <p id="password-error" style="color: #f87171; margin-top: 15px; font-size: 14px;"></p>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-screen" class="screen" style="width: 400px;">
+        <h2 class="admin-header">Administrative Console</h2>
+        <input type="text" id="target-user" placeholder="Enter Target Username" style="border-color: var(--green);">
+        <div class="controls">
+            <button class="btn-kick" onclick="executeCommand('Kick')">Kick User</button>
+            <button class="btn-ban" onclick="executeCommand('Ban')">Ban User</button>
+            <button class="btn-close" onclick="executeCommand('Close Tab')">Close User's Tab</button>
+        </div>
+        <p id="result-message"></p>
+    </div>
+
+<script>
+let attempts = 0;
+const MAX_ATTEMPTS = 3;
+
+function goToPassword() {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('password-screen').style.display = 'flex';
+}
+
+function checkPassword() {
+    const password = document.getElementById('password-input').value;
+    const errorText = document.getElementById('password-error');
+    
+    if (password === 'silent blox') {
+        document.getElementById('password-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'flex';
+    } else {
+        attempts++;
+        if (attempts >= MAX_ATTEMPTS) {
+            alert("Maximum attempts reached. Closing tab.");
+            window.close(); // Note: Scripts can only close tabs they opened themselves
+        } else {
+            errorText.textContent = `Access Denied. ${MAX_ATTEMPTS - attempts} attempts left.`;
+        }
+    }
+}
+
+function executeCommand(commandName) {
+    const user = document.getElementById('target-user').value;
+    const resultBox = document.getElementById('result-message');
+    
+    if (!user) {
+        resultBox.style.color = '#f87171';
+        resultBox.textContent = "Error: Please enter a username.";
+        return;
+    }
+    
+    // Simulate command execution
+    resultBox.style.color = 'var(--green)';
+    resultBox.textContent = `Successfully executed command: ${commandName} (${user})`;
+    
+    // Alert previously triggered here has been removed.
+}
+</script>
+
+</body>
+</html>
