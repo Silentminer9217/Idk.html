@@ -5,45 +5,110 @@
 <title>ADMINISTRATION CONSOLE</title>
 <style>
 body, html {
-    margin: 0; padding: 0; overflow: hidden; height: 100%;
-    background: #000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #launcher-ui {
-    width: 100%; height: 100%; display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: radial-gradient(circle, #001f3f 0%, #000000 100%);
+    gap: 30px;
+    z-index: 10;
 }
+
 /* Loading Animation: Blue and Green Spinning Circles */
 .loader {
-    width: 100px; height: 100px; border: 10px solid #00ff88;
-    border-top: 10px solid #0077ff; border-radius: 50%;
-    animation: spin 1s linear infinite; margin-bottom: 20px;
+    width: 100px;
+    height: 100px;
+    border: 10px solid #00ff88;
+    border-top: 10px solid #0077ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
 }
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
 .status-text {
-    color: #00ff88; font-size: 20px; text-shadow: 0 0 10px #00ff88;
+    color: #00ff88;
+    font-size: 20px;
+    text-shadow: 0 0 10px #00ff88;
     margin-bottom: 20px;
 }
+
 .btn {
-    padding: 15px 30px; background: transparent; color: #fff;
-    border: 2px solid #0077ff; border-radius: 5px; cursor: pointer;
-    font-size: 16px; transition: 0.3s; margin: 10px;
+    padding: 15px 30px;
+    background: transparent;
+    color: #fff;
+    border: 2px solid #0077ff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    margin: 10px;
 }
-.btn:hover { background: #0077ff; box-shadow: 0 0 20px #0077ff; }
-.slow-btn { color: #ffcc00; border-color: #ffcc00; display: none; }
+
+.btn:hover {
+    background: #0077ff;
+    box-shadow: 0 0 20px #0077ff;
+}
+
+.slow-btn {
+    color: #ffcc00;
+    border-color: #ffcc00;
+    display: none;
+}
+
 #console-output {
-    display: none; width: 100%; height: 100%; background: #000;
-    color: #00ff88; padding: 20px; box-sizing: border-box; overflow-y: auto;
-    white-space: pre-wrap; font-family: monospace; font-size: 14px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #00ff88;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 14px;
+    z-index: 20;
 }
 
 /* Admin Console Inline Styles */
 #admin-console {
-    display: none; width: 100%; height: 100%; background: #0f172a;
-    flex-direction: column; justify-content: center; align-items: center;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
 }
 
 .admin-container {
@@ -130,6 +195,16 @@ body, html {
 /* Password Screen */
 #password-screen {
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 20;
 }
 
 .password-container {
@@ -142,6 +217,7 @@ body, html {
     width: 350px;
     text-align: center;
     color: #e2e8f0;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -152,10 +228,11 @@ body, html {
     border: 2px solid #00d2ff;
     color: #e2e8f0;
     padding: 12px;
-    width: 80%;
+    width: 100%;
     border-radius: 6px;
     text-align: center;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 #password-input:focus {
@@ -166,7 +243,8 @@ body, html {
 #password-error {
     color: #f87171;
     font-size: 14px;
-    margin-top: 15px;
+    margin: 0;
+    min-height: 20px;
 }
 </style>
 </head>
@@ -184,9 +262,9 @@ body, html {
 <div id="console-output"></div>
 
 <!-- Password Screen (Inline) -->
-<div id="password-screen" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #0f172a;">
+<div id="password-screen">
     <div class="password-container">
-        <h3 style="color: #00d2ff; margin-top: 0;">Verify Your Access</h3>
+        <h3 style="color: #00d2ff; margin-top: 0; margin-bottom: 0;">Verify Your Access</h3>
         <input type="password" id="password-input" placeholder="Enter Password">
         <button class="btn" onclick="checkPassword()">Submit</button>
         <p id="password-error"></p>
@@ -194,7 +272,7 @@ body, html {
 </div>
 
 <!-- Admin Console (Inline) -->
-<div id="admin-console" style="width: 100%; height: 100%; background: #0f172a;">
+<div id="admin-console">
     <div class="admin-container">
         <h2 class="admin-header">Administrative Console</h2>
         <input type="text" id="target-user" class="admin-input" placeholder="Enter Target Username">
@@ -210,9 +288,8 @@ body, html {
 <script>
 let attempts = 0;
 const MAX_ATTEMPTS = 3;
-const FILE_URL = '';
 
-async function loadConsoleFile() {
+function loadConsoleFile() {
     const status = document.getElementById('status');
     const mainBtn = document.getElementById('main-btn');
     const slowBtn = document.getElementById('slow-btn');
@@ -224,21 +301,22 @@ async function loadConsoleFile() {
         slowBtn.style.display = 'block';
     }, 5000);
 
-    try {
-        const response = await fetch(FILE_URL);
-        const data = await response.text();
-        displayData(data);
-    } catch (error) {
-        status.innerText = "COULD NOT CONNECT. LAUNCHING BACKUP SERVER... CONSOLE OPERATIONAL...";
-        displayData("Error: Could not read local file. \nDetails: " + error.message);
-    }
-}
-
-function displayData(fileText) {
-    document.getElementById('launcher-ui').style.display = 'none';
-    const consoleBox = document.getElementById('console-output');
-    consoleBox.style.display = 'block';
-    consoleBox.innerText = fileText;
+    setTimeout(() => {
+        document.getElementById('launcher-ui').style.display = 'none';
+        const consoleBox = document.getElementById('console-output');
+        consoleBox.style.display = 'block';
+        consoleBox.innerText = "SERVER DATA CONSOLE INITIALIZED\n\n" +
+            "========================================\n" +
+            "System Status: OPERATIONAL\n" +
+            "Connection: SECURE\n" +
+            "Database: CONNECTED\n" +
+            "========================================\n\n" +
+            "Last Updated: " + new Date().toLocaleString() + "\n" +
+            "Active Users: 127\n" +
+            "Server Load: 45%\n" +
+            "Memory Usage: 62%\n\n" +
+            "All systems nominal.";
+    }, 2000);
 }
 
 function openAdminConsole() {
