@@ -4,35 +4,35 @@
 <meta charset="UTF-8">
 <title>ADMINISTRATION CONSOLE</title>
 <style>
-body, html {
+* {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    background: #000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
 }
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body, html {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e2e8f0;
 }
 
 #launcher-ui {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    background: radial-gradient(circle, #001f3f 0%, #000000 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle, #001f3f 0%, #000000 100%);
     gap: 30px;
     z-index: 10;
 }
 
-/* Loading Animation: Blue and Green Spinning Circles */
 .loader {
     width: 100px;
     height: 100px;
@@ -40,7 +40,6 @@ body {
     border-top: 10px solid #0077ff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin-bottom: 20px;
 }
 
 @keyframes spin {
@@ -52,7 +51,6 @@ body {
     color: #00ff88;
     font-size: 20px;
     text-shadow: 0 0 10px #00ff88;
-    margin-bottom: 20px;
 }
 
 .btn {
@@ -64,7 +62,6 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: 0.3s;
-    margin: 10px;
 }
 
 .btn:hover {
@@ -79,7 +76,6 @@ body {
 }
 
 #console-output {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -88,26 +84,79 @@ body {
     background: #000;
     color: #00ff88;
     padding: 20px;
-    box-sizing: border-box;
     overflow-y: auto;
     white-space: pre-wrap;
     font-family: monospace;
     font-size: 14px;
     z-index: 20;
+    display: none;
 }
 
-/* Admin Console Inline Styles */
-#admin-console {
-    display: none;
+#password-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: #0f172a;
-    flex-direction: column;
-    justify-content: center;
+    display: none;
     align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.password-container {
+    background: rgba(30, 41, 59, 0.7);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    width: 350px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.password-container h3 {
+    color: #00d2ff;
+    margin: 0;
+    font-size: 18px;
+}
+
+#password-input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid #00d2ff;
+    color: #e2e8f0;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#password-input:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+#password-error {
+    color: #f87171;
+    font-size: 14px;
+    min-height: 20px;
+    margin: 0;
+}
+
+#admin-console {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    display: none;
+    align-items: center;
+    justify-content: center;
     z-index: 20;
 }
 
@@ -120,12 +169,11 @@ body {
     backdrop-filter: blur(10px);
     width: 400px;
     text-align: center;
-    color: #e2e8f0;
 }
 
 .admin-header {
     color: #00d2ff;
-    margin-bottom: 30px;
+    margin: 0 0 30px 0;
     text-shadow: 0 0 10px #00d2ff;
     font-size: 24px;
 }
@@ -135,7 +183,7 @@ body {
     border: 2px solid #22c55e;
     color: #e2e8f0;
     padding: 12px;
-    width: 80%;
+    width: 100%;
     border-radius: 6px;
     margin-bottom: 20px;
     text-align: center;
@@ -151,11 +199,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 100%;
+    margin-bottom: 20px;
 }
 
 .admin-btn {
-    width: 100%;
     padding: 15px;
     font-size: 16px;
     font-weight: bold;
@@ -163,21 +210,19 @@ body {
     cursor: pointer;
     border: none;
     transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
 }
 
 .btn-kick {
     background: linear-gradient(135deg, #d97706, #fbbf24);
-    color: white;
 }
 
 .btn-ban {
     background: linear-gradient(135deg, #b91c1c, #f87171);
-    color: white;
 }
 
 .btn-close {
     background: linear-gradient(135deg, #4b5563, #9ca3af);
-    color: white;
 }
 
 .admin-btn:hover {
@@ -186,92 +231,34 @@ body {
 }
 
 #result-message {
-    margin-top: 20px;
-    font-weight: bold;
     color: #22c55e;
+    font-weight: bold;
     min-height: 24px;
-}
-
-/* Password Screen */
-#password-screen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 20;
-}
-
-.password-container {
-    background: rgba(30, 41, 59, 0.7);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    width: 350px;
-    text-align: center;
-    color: #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-#password-input {
-    background: rgba(15, 23, 42, 0.6);
-    border: 2px solid #00d2ff;
-    color: #e2e8f0;
-    padding: 12px;
-    width: 100%;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-#password-input:focus {
-    outline: none;
-    border-color: #22c55e;
-}
-
-#password-error {
-    color: #f87171;
-    font-size: 14px;
     margin: 0;
-    min-height: 20px;
 }
 </style>
 </head>
 <body>
 
 <div id="launcher-ui">
-    <div class="loader" id="loader-circle"></div>
+    <div class="loader"></div>
     <div class="status-text" id="status">INITIALIZING CONSOLE PLEASE WAIT...</div>
     <button class="btn" id="main-btn" onclick="loadConsoleFile()">OPEN ADMINISTRATIVE SERVER & DATA CONSOLE</button>
     <button class="btn slow-btn" id="slow-btn" onclick="loadConsoleFile()">TAKING TOO LONG? FORCE LOAD</button>
     <button class="btn" onclick="openAdminConsole()">OPEN ADMINISTRATIVE CONSOLE</button>
 </div>
 
-<!-- Data Console Output -->
 <div id="console-output"></div>
 
-<!-- Password Screen (Inline) -->
 <div id="password-screen">
     <div class="password-container">
-        <h3 style="color: #00d2ff; margin-top: 0; margin-bottom: 0;">Verify Your Access</h3>
+        <h3>Verify Your Access</h3>
         <input type="password" id="password-input" placeholder="Enter Password">
-        <button class="btn" onclick="checkPassword()">Submit</button>
+        <button class="btn" onclick="checkPassword()" style="margin: 0;">Submit</button>
         <p id="password-error"></p>
     </div>
 </div>
 
-<!-- Admin Console (Inline) -->
 <div id="admin-console">
     <div class="admin-container">
         <h2 class="admin-header">Administrative Console</h2>
@@ -288,6 +275,7 @@ body {
 <script>
 let attempts = 0;
 const MAX_ATTEMPTS = 3;
+const CONSOLE_XML_URL = 'https://cdn.jsdelivr.net/gh/Silentminer9217/Idk.html@main/console.xml';
 
 function loadConsoleFile() {
     const status = document.getElementById('status');
@@ -301,22 +289,21 @@ function loadConsoleFile() {
         slowBtn.style.display = 'block';
     }, 5000);
 
-    setTimeout(() => {
-        document.getElementById('launcher-ui').style.display = 'none';
-        const consoleBox = document.getElementById('console-output');
-        consoleBox.style.display = 'block';
-        consoleBox.innerText = "SERVER DATA CONSOLE INITIALIZED\n\n" +
-            "========================================\n" +
-            "System Status: OPERATIONAL\n" +
-            "Connection: SECURE\n" +
-            "Database: CONNECTED\n" +
-            "========================================\n\n" +
-            "Last Updated: " + new Date().toLocaleString() + "\n" +
-            "Active Users: 127\n" +
-            "Server Load: 45%\n" +
-            "Memory Usage: 62%\n\n" +
-            "All systems nominal.";
-    }, 2000);
+    fetch(CONSOLE_XML_URL)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('launcher-ui').style.display = 'none';
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.style.display = 'block';
+            consoleOutput.innerText = "XML CONSOLE DATA:\n\n" + data;
+        })
+        .catch(error => {
+            status.innerText = "LAUNCHING BACKUP SERVER... CONSOLE OPERATIONAL...";
+            document.getElementById('launcher-ui').style.display = 'none';
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.style.display = 'block';
+            consoleOutput.innerText = "Error loading XML: " + error.message;
+        });
 }
 
 function openAdminConsole() {
